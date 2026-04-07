@@ -1,5 +1,10 @@
 """
 LAB 1 - Sistema de Chat com Deteção de Dados Pessoais (GDPR)
+<<<<<<< HEAD
+=======
+Servidor multiusuário com deteção GDPR e engenharia social
+Instituto Politécnico de Setúbal
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 """
 
 import json
@@ -101,6 +106,10 @@ def algoritmo_luhn(numero: str) -> bool:
         checksum += d
     return checksum % 10 == 0
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def detetar_dados_pessoais(texto: str) -> Dict[str, List[str]]:
     """
     Procura dados pessoais no texto com expressões regulares.
@@ -144,6 +153,10 @@ def detetar_dados_pessoais(texto: str) -> Dict[str, List[str]]:
 
     return resultado
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def detetar_engenharia_social(texto: str, deteções: Dict[str, List[str]]) -> List[str]:
     """
     Identifica padrões de engenharia social.
@@ -177,6 +190,10 @@ def enviar(conn: socket.socket, texto: str) -> bool:
     except OSError:
         return False
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def receber(conn: socket.socket) -> Optional[str]:
     """Recebe uma mensagem do cliente. Devolve None se a ligação fechar."""
     try:
@@ -187,6 +204,10 @@ def receber(conn: socket.socket) -> Optional[str]:
         return None
     return dados.decode(ENCODING, errors="replace").strip()
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def broadcast(mensagem: str, excluir: Optional[socket.socket] = None) -> None:
     """Envia uma mensagem a todos os clientes ligados, exceto ao remetente."""
     with clients_lock:
@@ -194,6 +215,10 @@ def broadcast(mensagem: str, excluir: Optional[socket.socket] = None) -> None:
     for s in alvos:
         enviar(s, mensagem)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def username_em_uso(nome: str) -> bool:
     with clients_lock:
         return any(
@@ -201,6 +226,10 @@ def username_em_uso(nome: str) -> bool:
             for info in clients.values()
         )
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def obter_sessao_por_username(nome: str) -> Optional[Tuple[socket.socket, dict]]:
     with clients_lock:
         for s, info in clients.items():
@@ -218,6 +247,10 @@ def resumo_deteções(deteções: Dict[str, List[str]]) -> str:
         partes.append(f"{chave}: {', '.join(valores[:3])}")
     return " | ".join(partes)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def processar_mensagem(
     conn: socket.socket,
     info: dict,
@@ -384,6 +417,10 @@ def registar_cliente(conn: socket.socket, addr: Tuple[str, int]) -> Optional[dic
     enviar(conn, "[SISTEMA] Comandos: /users | /w <user> <msg> | /consent on|off | /help | exit")
     return info
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
 def gerir_cliente(conn: socket.socket, addr: Tuple[str, int]) -> None:
     """Thread principal de cada cliente."""
     info = registar_cliente(conn, addr)
@@ -462,4 +499,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> parent of 0f3c911 (Delete laboratorio1/servidor.py)
