@@ -1,6 +1,5 @@
 """
 LAB 2 - Web Crawler Ético
-Disciplina: Web Scraping / Programação Web
 """
 
 import requests
