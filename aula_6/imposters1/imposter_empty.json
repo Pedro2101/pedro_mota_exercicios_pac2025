@@ -1,0 +1,10 @@
+{
+  "imposters": [
+    {
+      "port": 4545,
+      "protocol": "http",
+      "name": "api-imposter-empty",
+      "stubs": []
+    }
+  ]
+}

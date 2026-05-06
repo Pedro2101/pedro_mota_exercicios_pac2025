@@ -1,0 +1,335 @@
+{
+  "imposters": [
+    {
+      "port": 4546,
+      "protocol": "http",
+      "name": "imposter-apis-rest",
+      "stubs": [
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/alunos" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"alunos\":[{\"id\":1,\"nome\":\"Ana\",\"idade\":20,\"curso\":\"Engenharia\"},{\"id\":2,\"nome\":\"Bruno\",\"idade\":22,\"curso\":\"Gestao\"}]}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/alunos/1" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":1,\"nome\":\"Ana\",\"idade\":20,\"curso\":\"Engenharia\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/alunos/999" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Aluno nao encontrado\"}" } }]
+        },
+
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/alunos" } },
+            { "equals": { "headers": { "content-type": "application/json" } } },
+            { "contains": { "body": "\"idade\":9" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Idade minima nao atingida\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/alunos" } },
+            { "equals": { "headers": { "content-type": "application/json" } } },
+            { "contains": { "body": "\"curso\":\"CursoInexistente\"" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Curso nao encontrado\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/alunos" } },
+            { "equals": { "headers": { "content-type": "application/json" } } },
+            { "not": { "contains": { "body": "\"nome\"" } } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Campos obrigatorios: nome, idade, curso\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/alunos" } },
+            { "equals": { "headers": { "content-type": "application/json" } } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json", "Location": "/api/alunos/3" }, "body": "{\"id\":3,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/alunos/999" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Aluno nao encontrado\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/alunos/1" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":1,\"status\":\"updated\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "DELETE", "path": "/api/alunos/1" } },
+            { "not": { "equals": { "headers": { "x-role": "admin" } } }
+            }
+          ]}],
+          "responses": [{ "is": { "statusCode": 403, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Apenas administracao\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "DELETE", "path": "/api/alunos/1" } },
+            { "equals": { "headers": { "x-role": "admin" } } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"deleted\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/produtos" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"produtos\":[{\"id\":10,\"nome\":\"Teclado\",\"preco\":25,\"quantidade\":10},{\"id\":11,\"nome\":\"Rato\",\"preco\":12,\"quantidade\":0}]}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/produtos/10" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":10,\"nome\":\"Teclado\",\"preco\":25,\"quantidade\":10}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/produtos/999" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Produto nao encontrado\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/produtos" } },
+            { "contains": { "body": "\"quantidade\":-" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Valor invalido\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/produtos" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":12,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/produtos/999/stock" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Produto nao encontrado\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/produtos/10/stock" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":10,\"status\":\"stock_updated\",\"quantidade\":15}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/produtos/10" } }],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Stock tem de ser zero\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/produtos/11" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"deleted\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/reservas" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"reservas\":[{\"id\":201,\"cliente\":\"Rita\",\"checkin\":\"2026-12-01\",\"checkout\":\"2026-12-03\",\"tipo_quarto\":\"duplo\"}]}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/reservas" } },
+            { "contains": { "body": "\"checkout\":\"2026-05-01\"" } },
+            { "contains": { "body": "\"checkin\":\"2026-05-10\"" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"checkout anterior ao checkin\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/reservas" } },
+            { "contains": { "body": "\"tipo_quarto\":\"suite\"" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Sem disponibilidade\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/reservas" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":202,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/reservas/old" } }],
+          "responses": [{ "is": { "statusCode": 403, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Alteracao so ate 24h antes do checkin\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/reservas/201" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":201,\"status\":\"updated\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/reservas/past" } }],
+          "responses": [{ "is": { "statusCode": 403, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Nao permitido apos checkin\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/reservas/201" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"cancelled\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/livros" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"livros\":[{\"id\":301,\"titulo\":\"Clean Code\",\"emprestado\":false},{\"id\":302,\"titulo\":\"DDD\",\"emprestado\":true}]}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/livros/301" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":301,\"titulo\":\"Clean Code\",\"emprestado\":false}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/emprestimos" } },
+            { "contains": { "body": "\"livro_id\":302" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Livro emprestado\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/emprestimos" } },
+            { "not": { "contains": { "body": "\"cliente\"" } } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Campos obrigatorios: cliente, livro_id, data_emprestimo\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/emprestimos" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":401,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/emprestimos/999/devolucao" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Emprestimo nao encontrado\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/emprestimos/401/devolucao" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"returned\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/livros/302" } }],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Livro emprestado\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/livros/301" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"deleted\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/funcionarios" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"funcionarios\":[{\"id\":501,\"nome\":\"Luis\",\"cargo\":\"Dev\",\"salario\":1200},{\"id\":502,\"nome\":\"Carla\",\"cargo\":\"RH\",\"salario\":900}]}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/funcionarios" } },
+            { "contains": { "body": "\"salario\":700" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Salario minimo 760\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/funcionarios" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":503,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "PUT", "path": "/api/funcionarios/501/salario" } },
+            { "contains": { "body": "\"salario\":700" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Salario minimo 760\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/funcionarios/501/salario" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":501,\"status\":\"salary_updated\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/funcionarios/501" } }],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Funcionario com tarefas pendentes\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/funcionarios/502" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"deleted\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/tarefas" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"tarefas\":[{\"id\":601,\"titulo\":\"Estudar\",\"estado\":\"pendente\"},{\"id\":602,\"titulo\":\"Entregar trabalho\",\"estado\":\"concluida\"}]}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/tarefas/601" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":601,\"titulo\":\"Estudar\",\"descricao\":\"Capitulo 3\",\"estado\":\"pendente\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/tarefas" } },
+            { "contains": { "body": "\"titulo\":\"\"" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Titulo vazio\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/tarefas" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":603,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/tarefas/601" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":601,\"status\":\"updated\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/tarefas/601" } }],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"So pode apagar tarefas concluidas\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/tarefas/602" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"deleted\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/clientes" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"clientes\":[{\"id\":701,\"nome\":\"Marta\"},{\"id\":702,\"nome\":\"Joao\"}]}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/clientes" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":703,\"status\":\"created\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET", "path": "/api/clientes/701/pedidos" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"cliente_id\":701,\"pedidos\":[{\"id\":801,\"estado\":\"Em processamento\"}]}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/pedidos" } },
+            { "contains": { "body": "\"cliente_id\":999" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Cliente inexistente\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "POST", "path": "/api/pedidos" } },
+            { "contains": { "body": "\"quantidade\":0" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Quantidade invalida\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "POST", "path": "/api/pedidos" } }],
+          "responses": [{ "is": { "statusCode": 201, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":802,\"estado\":\"Em processamento\"}" } }]
+        },
+        {
+          "predicates": [{ "and": [
+            { "equals": { "method": "PUT", "path": "/api/pedidos/802" } },
+            { "contains": { "body": "\"estado\":\"Cancelado\"" } }
+          ]}],
+          "responses": [{ "is": { "statusCode": 400, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"Estado invalido\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT", "path": "/api/pedidos/802" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"id\":802,\"status\":\"updated\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/pedidos/803" } }],
+          "responses": [{ "is": { "statusCode": 409, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"So pode cancelar em processamento\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE", "path": "/api/pedidos/802" } }],
+          "responses": [{ "is": { "statusCode": 200, "headers": { "Content-Type": "application/json" }, "body": "{\"status\":\"cancelled\"}" } }]
+        },
+
+        {
+          "predicates": [{ "equals": { "method": "POST" } }],
+          "responses": [{ "is": { "statusCode": 415, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"unsupported_media_type\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "GET" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"not_found\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "PUT" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"not_found\"}" } }]
+        },
+        {
+          "predicates": [{ "equals": { "method": "DELETE" } }],
+          "responses": [{ "is": { "statusCode": 404, "headers": { "Content-Type": "application/json" }, "body": "{\"error\":\"not_found\"}" } }]
+        }
+      ]
+    }
+  ]
+}
